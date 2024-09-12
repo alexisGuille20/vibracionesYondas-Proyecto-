@@ -59,11 +59,14 @@ function updatePendulum(radio) {
 
 
     function limpiarGrafica() {
-    chart.data[0].x = [];
-    chart.data[0].y = [];
-    
-    Plotly.newPlot(graficaCanvas, chart.data, chart.layout);
+        //reset grafica de anguo vs tiempo
+        chart.data[0].x = [];
+        chart.data[0].y = [];
+        chart.layout.width= 0;
+        chart.layout.height= 0;
+        Plotly.newPlot(graficaCanvas, chart.data, chart.layout);
 
+        //reset energia vs tiempo
         chart2.data[0].x = [];
         chart2.data[0].y = [];
         chart2.data[1].x = [];
@@ -396,33 +399,6 @@ function updatePendulum(radio) {
 
 
     function generarGrafica() {
-        chart = {
-        data: [
-            {
-            x: [],
-            y: [],
-            name: "Ángulo vs Tiempo",
-            mode: "lines",
-            line: { color: "rgb(75, 192, 192)" },
-            width: 700, // Add this line
-            height: 350, // Add this line
-            },
-        ],
-        layout: {
-            title: "Ángulo vs Tiempo",
-            xaxis: {
-            title: "Tiempo (s)",
-            range: [0, 10],
-            },
-            yaxis: {
-            title: "Ángulo (deg)",
-            //range: [-1* Math.PI, Math.PI],
-            },
-            width: 700, // Add this line
-            height: 350, // Add this line
-        },
-        };
-        
         chart2 = {
             data: [
             {
@@ -460,16 +436,43 @@ function updatePendulum(radio) {
             height: 350, // Add this line
             },
         };
-    
+        if ((tipoMovimientoSelect.value === "mas") || ((tipoMovimientoSelect === "amortiguado") && (banderaSubamortiguado === true))) {
+            Plotly.newPlot(graficaCanvas2, chart2.data, chart2.layout);
+            } else{
+            chart2.layout.width = 0;
+            chart2.layout.height = 0;
+            Plotly.newPlot(graficaCanvas2, chart2.data, chart2.layout);
+            }
+
+        
+        chart = {
+            data: [
+                {
+                x: [],
+                y: [],
+                name: "Ángulo vs Tiempo(oe)",
+                mode: "lines",
+                line: { color: "red" },
+                
+                },
+            ],
+            layout: {
+                title: "Ángulo vs Tiempo",
+                xaxis: {
+                title: "Tiempo (s)",
+                range: [0, 10],
+                },
+                yaxis: {
+                title: "Ángulo (deg)",
+                //range: [-1* Math.PI, Math.PI],
+                },
+                width: 700, // Add this line
+                height: 350, // Add this line
+            },
+        };
         Plotly.newPlot(graficaCanvas, chart.data, chart.layout);
 
-        if ((tipoMovimientoSelect.value === "mas") || ((tipoMovimientoSelect === "amortiguado") && (banderaSubamortiguado === true))) {
-        Plotly.newPlot(graficaCanvas2, chart2.data, chart2.layout);
-        } else{
-        chart2.layout.width = 0;
-        chart2.layout.height = 0;
-        Plotly.newPlot(graficaCanvas2, chart2.data, chart2.layout);
-        }
+        
 
     }
 
